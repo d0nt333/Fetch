@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="keywords" content="JS, funkcje, fetchowanie, JavaScript">
+        <title>Fetchowanie</title>
+    <style>
+        *{
+            margin: 0px;
+        }
+        body{
+            height: 100%;
+        }
+        h1{
+            height: 30px;
+            text-align: center;
+        }
+        .grid{
+            display: grid;
+            width: 100%;
+            height: calc(100vh - 52px);
+            grid-template-columns: 1fr 1fr 1fr 1fr; 
+            grid-template-rows: 1fr 2fr 1fr;
+            grid-template-areas: 
+            "header header recipe recipe"
+            "photo photo recipe recipe"
+            "photo photo recipe recipe";
+        }
+        .naglowek{
+            grid-area: header;
+            background-color: rgb(232, 232, 221);
+            box-shadow: 8px 8px 24px 0px rgb(195, 188, 188);
+            font-size: 100px;
+            color: white;
+            text-shadow: 2px 2px #322929;
+        }
+        .przepis{
+            grid-area: recipe;
+            box-sizing: border-box;
+            padding: 50px;
+            background-color: rgb(232, 232, 221);
+            box-shadow: 8px 8px 24px 0px black;
+        }
+        .zdjontko{
+            grid-area: photo;
+            width: calc(100% - 50px);
+            height: calc(100% - 50px);
+            margin: auto;
+        }
+        .zdjontko img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+        .naglowek, .przepis{
+            border-radius: 50px;
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+    </head>
+    <body>
+        <h1 id="nazwa">Nazwa potrawy</h1>
+        <form id="form">   
+        <input id="input" type="text">
+        <button  type="submit">Prześlij</button>
+        </form>
+        <!--<button onclick="mojaFunkcja()">Przycisk</button>-->
+        <div id="uno"></div>
+        <div id="dos"></div>
+        <div id="tres"></div>
+
+
+        <div class="grid">
+            <div class="naglowek"></div>
+            <div class="przepis"></div>
+            <div class="zdjontko"><img class="zdjecie" src=""></div>
+        </div>
+
+        <script>
+            let input = document.querySelector("#input")
+            /*input.addEventListener('input', ()=>{
+                let x = input.value
+                document.querySelector("#uno").innerHTML=x
+            })*/
+            /*input.addEventListener('change', ()=>{
+                mojaFunkcja(input.value)
+            })*/
+            document.querySelector("#form").addEventListener("submit", e=>{
+                e.preventDefault()
+                mojaFunkcja(input.value)
+            })
+            function mojaFunkcja(val){
+                fetch("https://www.themealdb.com/api/json/v1/1/search.php?s="+val)
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector(".naglowek").innerHTML=data.meals[0].strCategory
+                    document.querySelector("#nazwa").innerHTML=data.meals[0].strMeal
+                    document.querySelector(".przepis").innerHTML=data.meals[0].strInstructions
+                    document.querySelector(".zdjecie").src=data.meals[0].strMealThumb
+                })
+            }
+            
+
+            
+
+        </script>
+    </body>
+</html>
